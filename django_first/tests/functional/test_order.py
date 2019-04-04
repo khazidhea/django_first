@@ -44,6 +44,22 @@ def test_order_process_ok(db, data):
     assert store_item.quantity == 90
 
 
+def test_order_process_ok_mulitple_payments(db, data):
+    product, store, store_item, order, order_item, payment = data
+    payment.amount = 50
+    payment.save()
+    Payment.objects.create(
+        order=order,
+        amount=50,
+        is_confirmed=True
+    )
+    order.process()
+    store_item.refresh_from_db()
+    assert order.price == 100
+    assert order.is_paid is True
+    assert store_item.quantity == 90
+
+
 def test_order_process_fail_not_enough_stock(db, data):
     product, store, store_item, order, order_item, payment = data
     order_item.quantity = 200
