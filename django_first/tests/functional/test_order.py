@@ -76,3 +76,12 @@ def test_order_process_fail_not_enough_money(db, data):
     with pytest.raises(Exception) as e:
         order.process()
     assert str(e.value) == 'Not enough money'
+
+
+def test_order_process_fail_payment_not_confirmed(db, data):
+    product, store, store_item, order, order_item, payment = data
+    payment.is_confirmed = False
+    payment.save()
+    with pytest.raises(Exception) as e:
+        order.process()
+    assert str(e.value) == 'Not enough money'
