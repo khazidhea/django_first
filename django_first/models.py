@@ -48,6 +48,12 @@ class Order(models.Model):
         self.price = sum(
             (item.product.price * item.quantity for item in self.items.all())
         )
+
+        confirmed_payments = self.payments.filter(is_confirmed=True)
+        paid_amount = sum((payment.amount for payment in confirmed_payments))
+        if paid_amount < self.price:
+            raise Exception('Not enough money')
+
         self.is_paid = True
         self.save()
 
@@ -62,3 +68,15 @@ class OrderItem(models.Model):
         related_name='order_items'
     )
     quantity = models.IntegerField()
+
+
+class Payment(models.Model):
+    order = models.ForeignKey(
+        Order, on_delete=models.CASCADE,
+        related_name='payments'
+    )
+    amount = models.DecimalField(
+        max_digits=10, decimal_places=2,
+        blank=True, null=True
+    )
+    is_confirmed = models.BooleanField(default=False)
