@@ -33,7 +33,10 @@ class Order(models.Model):
     is_paid = models.BooleanField(default=False)
 
     def process(self):
-        store = Store.objects.get(location=self.location)
+        try:
+            store = Store.objects.get(location=self.location)
+        except Store.DoesNotExist:
+            raise Exception('Location not available')
         for item in self.items.all():
             store_item = StoreItem.objects.get(
                 store=store,
