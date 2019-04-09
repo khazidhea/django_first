@@ -1,7 +1,7 @@
 import pytest
 
 from django_first.models import (
-    Order, OrderItem, Product, Store, StoreItem, Payment
+    Order, OrderItem, Product, Store, StoreItem, Payment, Customer
 )
 from django_first.exceptions import StoreException, PaymentException
 
@@ -20,8 +20,12 @@ def data():
         product=product,
         quantity=100
     )
+    customer = Customer.objects.create(
+        name='Alice'
+    )
     order = Order.objects.create(
-        location='Almaty'
+        location='Almaty',
+        customer=customer
     )
     order_item = OrderItem.objects.create(
         order=order,
@@ -43,6 +47,7 @@ def test_order_process_ok(db, data):
     assert order.price == 100
     assert order.is_paid is True
     assert store_item.quantity == 90
+    assert order.customer.name == 'Alice'
 
 
 def test_order_process_ok_mulitple_payments(db, data):
