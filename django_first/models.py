@@ -10,6 +10,10 @@ class Product(models.Model):
     )
 
 
+class Customer(models.Model):
+    name = models.CharField(max_length=100)
+
+
 class Store(models.Model):
     location = models.CharField(max_length=100)
 
