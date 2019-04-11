@@ -5,5 +5,10 @@
 <body>
     <p>Hello, world!</p>
     <p>Hi, {{ request.user }}</p>
+    <ul>
+        {% for order in orders %}
+        <li>{{ order.id }}</li>
+        {% endfor %}
+    </ul>
 </body>
 </html>
