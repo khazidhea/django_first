@@ -1,8 +1,10 @@
-def test_hello(client):
+def test_hello(db, client, data):
+    client.login(username='alice', password='alice')
     response = client.get('/')
     assert response.status_code == 200
     response = response.content.decode('utf-8')
     assert 'Hello, world!' in response
+    assert 'alice' in response
 
 
 def test_bye(client):

@@ -1,43 +1,7 @@
 import pytest
 
-from django_first.models import (
-    Order, OrderItem, Product, Store, StoreItem, Payment, Customer
-)
+from django_first.models import Payment
 from django_first.exceptions import StoreException, PaymentException
-
-
-@pytest.fixture
-def data():
-    product = Product.objects.create(
-        name='apple',
-        price=10
-    )
-    store = Store.objects.create(
-        location='Almaty',
-    )
-    store_item = StoreItem.objects.create(
-        store=store,
-        product=product,
-        quantity=100
-    )
-    customer = Customer.objects.create(
-        name='Alice'
-    )
-    order = Order.objects.create(
-        location='Almaty',
-        customer=customer
-    )
-    order_item = OrderItem.objects.create(
-        order=order,
-        product=product,
-        quantity=10
-    )
-    payment = Payment.objects.create(
-        order=order,
-        amount=1000,
-        is_confirmed=True
-    )
-    return product, store, store_item, order, order_item, payment
 
 
 def test_order_process_ok(db, data):
@@ -48,6 +12,7 @@ def test_order_process_ok(db, data):
     assert order.is_paid is True
     assert store_item.quantity == 90
     assert order.customer.name == 'Alice'
+    assert order.customer.user.username == 'alice'
 
 
 def test_order_process_ok_mulitple_payments(db, data):
