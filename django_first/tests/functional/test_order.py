@@ -1,18 +1,25 @@
 import pytest
 
-from django_first.models import Payment
+from django_first.models import Payment, OrderItem
 from django_first.exceptions import StoreException, PaymentException
 
 
 def test_order_process_ok(db, data):
     product, store, store_item, order, order_item, payment = data
+    assert order.price == 100
     order.process()
     store_item.refresh_from_db()
-    assert order.price == 100
     assert order.is_paid is True
     assert store_item.quantity == 90
     assert order.customer.name == 'Alice'
     assert order.customer.user.username == 'alice'
+
+
+def test_order_item_price_signal_ok(db, data):
+    product, store, store_item, order, order_item, payment = data
+    assert order.price == 100
+    OrderItem.objects.create(order=order, product=product, quantity=20)
+    assert order.price == 300
 
 
 def test_order_process_ok_mulitple_payments(db, data):
