@@ -1,0 +1,12 @@
+<html>
+<head>
+    <title>Hello</title>
+</head> 
+<body>
+    <ul>
+        {% for item in order.items.all %}
+        <li>{{ item.product.name }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

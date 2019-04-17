@@ -15,6 +15,13 @@ def test_hello(db, client, data):
     assert len(response.cssselect('li')) == orders.count()
 
 
+def test_order(db, client, data):
+    response = client.get('/orders/1/')
+    assert response.status_code == 200
+    response = response.content.decode('utf-8')
+    assert 'apple' in response
+
+
 def test_bye(client):
     response = client.get('/bye/')
     assert response.status_code == 200
