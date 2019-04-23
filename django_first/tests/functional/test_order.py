@@ -24,6 +24,11 @@ def test_order_item_price_signal_ok(db, data):
     assert order.price == 300
 
 
+def test_payment_signal_ok(db, data):
+    product, store, store_item, order, order_item, payment = data
+    assert order.is_paid is True
+
+
 def test_order_process_ok_mulitple_payments(db, data):
     product, store, store_item, order, order_item, payment = data
     payment.amount = 50
