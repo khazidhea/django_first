@@ -3,9 +3,9 @@
 {% block content %}
     <p>Hello, world!</p>
     <p>Hi, {{ request.user }}</p>
-    <ul>
+    <ul class="list-group">
         {% for order in orders %}
-        <li><a href="{% url 'orders' order.id %}">{{ order.id }}</a></li>
+        <li class="list-group-item"><a href="{% url 'orders' order.id %}">{{ order.id }}</a></li>
         {% endfor %}
     </ul>
 {% endblock %}
