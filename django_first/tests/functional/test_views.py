@@ -22,6 +22,8 @@ def test_order_view(db, client, data):
     response = html.fromstring(response)
     items = response.cssselect('.list-group-item')
     assert items[0].text == 'apple 10'
+    assert response.cssselect('#product') != []
+    assert response.cssselect('#quantity') != []
 
 
 def test_order_add_same(db, client, data):
