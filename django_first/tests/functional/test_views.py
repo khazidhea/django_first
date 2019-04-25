@@ -49,6 +49,34 @@ def test_order_add_new(db, client, data):
     assert items[1].text == 'banana 30'
 
 
+def test_order_add_empty_quantity(db, client, data):
+    response = client.post('/orders/1/', {'product': 1, 'quantity': ''})
+    assert response.status_code == 400
+    response = response.content.decode('utf-8')
+    assert response == 'Quantity must be a positive int'
+
+
+def test_order_add_nonint_quantity(db, client, data):
+    response = client.post('/orders/1/', {'product': 1, 'quantity': 'asd'})
+    assert response.status_code == 400
+    response = response.content.decode('utf-8')
+    assert response == 'Quantity must be a positive int'
+
+
+def test_order_add_zero_quantity(db, client, data):
+    response = client.post('/orders/1/', {'product': 1, 'quantity': 0})
+    assert response.status_code == 400
+    response = response.content.decode('utf-8')
+    assert response == 'Quantity must be a positive int'
+
+
+def test_order_add_negative_quantity(db, client, data):
+    response = client.post('/orders/1/', {'product': 1, 'quantity': -10})
+    assert response.status_code == 400
+    response = response.content.decode('utf-8')
+    assert response == 'Quantity must be a positive int'
+
+
 def test_bye(client):
     response = client.get('/bye/')
     assert response.status_code == 200
