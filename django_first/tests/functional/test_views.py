@@ -15,11 +15,13 @@ def test_hello(db, client, data):
     assert len(response.cssselect('li')) == orders.count()
 
 
-def test_order(db, client, data):
+def test_order_view(db, client, data):
     response = client.get('/orders/1/')
     assert response.status_code == 200
     response = response.content.decode('utf-8')
-    assert 'apple' in response
+    response = html.fromstring(response)
+    items = response.cssselect('.list-group-item')
+    assert items[0].text == 'apple 10'
 
 
 def test_bye(client):
