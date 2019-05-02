@@ -8,8 +8,7 @@
     </ul>
     <form method="POST">
     {% csrf_token %}
-    <input type="text" id="product" name="product"/>
-    <input type="text" id="quantity" name="quantity"/>
+    {{ form }}
     <input type="submit"/>
     </form>
 {% endblock %}
