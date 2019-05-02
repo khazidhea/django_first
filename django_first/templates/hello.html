@@ -8,4 +8,9 @@
         <li class="list-group-item"><a href="{% url 'orders' order.id %}">{{ order.id }}</a></li>
         {% endfor %}
     </ul>
+    <form method="POST">
+    {% csrf_token %}
+    <input type="text" id="location" name="location"/>
+    <input type="submit"/>
+    </form>
 {% endblock %}
