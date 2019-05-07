@@ -12,6 +12,9 @@ def test_hello(db, client, data):
     response = html.fromstring(response)
     a = response.cssselect('a[href="/orders/"]')
     assert len(a) == 1
+    products = response.cssselect('.list-group-item')
+    assert len(products) == Product.objects.count()
+    assert products[0].text == 'apple 10.00'
 
 
 def test_order_view(db, client, data):
