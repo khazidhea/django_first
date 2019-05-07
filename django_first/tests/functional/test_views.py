@@ -8,13 +8,10 @@ def test_hello(db, client, data):
     response = client.get('/')
     assert response.status_code == 200
     response = response.content.decode('utf-8')
-    assert 'Hello, world!' in response
     assert 'alice' in response
     response = html.fromstring(response)
-    orders = Order.objects.filter(customer__user__username='alice')
-    items = response.cssselect('.list-group-item > a')
-    assert len(items) == orders.count()
-    assert items[0].text == '1'
+    a = response.cssselect('a[href="/orders/"]')
+    assert len(a) == 1
 
 
 def test_order_view(db, client, data):
