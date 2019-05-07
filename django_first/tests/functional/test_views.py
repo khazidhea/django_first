@@ -30,7 +30,7 @@ def test_order_view(db, client, data):
 
 def test_order_add(db, client, data):
     client.login(username='alice', password='alice')
-    response = client.post('/', {'location': 'Almaty'})
+    response = client.post('/orders/', {'location': 'Almaty'})
     assert response.status_code == 200
     response = response.content.decode('utf-8')
     response = html.fromstring(response)
@@ -109,3 +109,15 @@ def test_bye(client):
     response = client.get('/bye/')
     assert response.status_code == 200
     assert response.content == b'Bye, world!'
+
+
+def test_order_list(db, client, data):
+    client.login(username='alice', password='alice')
+    response = client.get('/orders/')
+    assert response.status_code == 200
+    response = response.content.decode('utf-8')
+    response = html.fromstring(response)
+    orders = Order.objects.filter(customer__user__username='alice')
+    items = response.cssselect('.list-group-item > a')
+    assert len(items) == orders.count()
+    assert items[0].text == '1'
