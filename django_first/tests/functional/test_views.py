@@ -1,6 +1,7 @@
 from lxml import html
+from django.contrib.auth.models import User
 
-from django_first.models import Order, Product
+from django_first.models import Order, Product, Customer
 
 
 def test_login(db, client, data):
@@ -126,6 +127,10 @@ def test_bye(client):
 
 
 def test_order_list(db, client, data):
+    extra_user = User.objects.create_user(username='bob', password='alice')
+    extra_customer = Customer.objects.create(name='Bob', user=extra_user)
+    Order.objects.create(location='Almaty', customer=extra_customer)
+
     client.login(username='alice', password='alice')
     response = client.get('/orders/')
     assert response.status_code == 200

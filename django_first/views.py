@@ -1,6 +1,9 @@
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
+from django.views import View
+from django.views.generic import ListView
+from django.views.generic.base import TemplateView
 
 from .models import Order, OrderItem, Product, Customer
 from .forms import OrderItemForm
@@ -22,25 +25,28 @@ def login_view(request):
     return render(request, 'login.html')
 
 
-def hello(request):
-    products = Product.objects.all()
-    return render(request, 'hello.html', context={
-        'products': products
-    })
+class HelloView(ListView):
+    model = Product
+    context_object_name = 'products'
+    template_name = 'hello.html'
 
 
-def order_list(request):
-    if request.method == 'POST':
+class OrderListView(ListView):
+    model = Order
+    context_object_name = 'orders'
+    template_name = 'orders.html'
+
+    def get_queryset(self):
+        return Order.objects.filter(customer__user=self.request.user)
+
+    def post(self, request):
         customer = Customer.objects.get(user=request.user)
         location = request.POST.get('location')
         Order.objects.create(
             customer=customer,
             location=location
         )
-    orders = Order.objects.filter(customer__user=request.user)
-    return render(request, 'orders.html', context={
-        'orders': orders
-    })
+        return self.get(request)
 
 
 def order_detail(request, order_id):
