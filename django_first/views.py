@@ -1,8 +1,25 @@
-from django.http import HttpResponse
+from django.contrib.auth import authenticate, login
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 
 from .models import Order, OrderItem, Product, Customer
 from .forms import OrderItemForm
+
+
+def login_view(request):
+    if request.user.is_authenticated:
+        print('authenticated')
+    if request.method == 'POST':
+        user = authenticate(
+            username=request.POST.get('username'),
+            password=request.POST.get('password')
+        )
+        if user is not None:
+            login(request, user)
+            return HttpResponseRedirect('/')
+        else:
+            return HttpResponse('wrong username or password', status=401)
+    return render(request, 'login.html')
 
 
 def hello(request):
