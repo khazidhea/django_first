@@ -9,10 +9,8 @@ from .models import Order, OrderItem, Product, Customer
 from .forms import OrderItemForm
 
 
-def login_view(request):
-    if request.user.is_authenticated:
-        print('authenticated')
-    if request.method == 'POST':
+class LoginView(View):
+    def post(self, request):
         user = authenticate(
             username=request.POST.get('username'),
             password=request.POST.get('password')
@@ -22,7 +20,7 @@ def login_view(request):
             return HttpResponseRedirect('/')
         else:
             return HttpResponse('wrong username or password', status=401)
-    return render(request, 'login.html')
+        return render(request, 'login.html')
 
 
 class HelloView(ListView):
