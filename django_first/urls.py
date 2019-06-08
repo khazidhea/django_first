@@ -24,6 +24,6 @@ urlpatterns = [
     path('login/', views.login_view),
     path('orders/', views.OrderListView.as_view(), name='order_list'),
     path('orders/<int:order_id>/', views.order_detail, name='order_detail'),
-    path('bye/', views.bye),
+    path('bye/', views.ByeView.as_view()),
     path('admin/', admin.site.urls),
 ]

@@ -78,5 +78,5 @@ def order_detail(request, order_id):
     })
 
 
-def bye(request):
-    return HttpResponse('Bye, world!')
+class ByeView(TemplateView):
+    template_name = 'bye.html'
