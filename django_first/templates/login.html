@@ -6,8 +6,7 @@
 {% else %}
 <form method="POST">
     {% csrf_token %}
-    <input type="text" name="username"/>
-    <input type="password" name="password"/>
+    {{ form }}
     <input type="submit">
 </form>
 {% endif %}

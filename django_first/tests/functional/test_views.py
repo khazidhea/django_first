@@ -15,7 +15,8 @@ def test_login_fail(db, client, data):
     response = client.post(
         '/login/', {'username': 'alice', 'password': 'wrongpassword'}
     )
-    assert response.status_code == 401
+    assert response.status_code == 200
+    assert b'Please enter a correct username and password.' in response.content
 
 
 def test_hello(db, client, data):
