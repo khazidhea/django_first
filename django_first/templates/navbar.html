@@ -1,0 +1,26 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav ml-auto">
+    {% if not user.is_authenticated %}
+      <li>
+        <form class="form-inline my-2 my-lg-0" method="POST" action="/login/">
+          {% csrf_token %}
+          <input class="form-control mr-sm-2" type="text" name="username" placeholder="Username">
+          <input class="form-control mr-sm-2" type="password" name="password" placeholder="Password">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Login</button>
+        </form>
+      </li>
+    {% else %}
+    
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{ user.username }}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/logout/">Logout</a>
+        </div>
+      </li>
+    </ul>
+    {% endif %}
+  </div>
+</nav>

@@ -19,15 +19,32 @@ def test_login_fail(db, client, data):
     assert b'Please enter a correct username and password.' in response.content
 
 
+def test_logout(db, client, data):
+    client.login(username='alice', password='alice')
+    response = client.post('/logout/', follow=True)
+    assert response.status_code == 200
+    response = response.content.decode('utf-8')
+    response = html.fromstring(response)
+    assert len(response.cssselect('input[name="username"]')) == 1
+
+
 def test_hello(db, client, data):
     client.login(username='alice', password='alice')
     response = client.get('/')
     assert response.status_code == 200
     response = response.content.decode('utf-8')
-    assert 'alice' in response
     response = html.fromstring(response)
+
+    # Assert dropdown with username is in navbar
+    a = response.cssselect('a[class="nav-link dropdown-toggle"]')
+    assert len(a) == 1
+    assert a[0].text.strip() == 'alice'
+
+    # Assert there is a link to orders
     a = response.cssselect('a[href="/orders/"]')
     assert len(a) == 1
+
+    # Assert there is a list of products with product name and price
     products = response.cssselect('.list-group-item')
     assert len(products) == Product.objects.count()
     assert products[0].text == 'apple 10.00'
