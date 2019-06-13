@@ -74,14 +74,18 @@ def test_order_view(db, client, data):
 
 def test_order_add(db, client, data):
     client.login(username='alice', password='alice')
-    response = client.post('/orders/', {'location': 'Almaty'})
+    response = client.post(
+        '/orders/',
+        {'location': 'Almaty', 'product_id': 1},
+        follow=True
+    )
     assert response.status_code == 200
+    last_url, status_code = response.redirect_chain[-1]
+    assert last_url == '/orders/2/'
     response = response.content.decode('utf-8')
     response = html.fromstring(response)
-    orders = response.cssselect('.list-group-item > a')
-    assert len(orders) == 2
-    assert orders[0].text == '1'
-    assert orders[1].text == '2'
+    items = response.cssselect('.list-group-item')
+    assert items[0].text == 'apple 1'
 
 
 def test_order_add_item_same(db, client, data):
