@@ -29,7 +29,7 @@ def test_logout(db, client, data):
     assert len(response.cssselect('input[name="username"]')) == 1
 
 
-def test_hello(db, client, data):
+def test_home(db, client, data):
     client.login(username='alice', password='alice')
     response = client.get('/')
     assert response.status_code == 200
@@ -42,7 +42,7 @@ def test_hello(db, client, data):
     assert a[0].text.strip() == 'alice'
 
     # Assert there is a link to home page
-    url = reverse('hello')
+    url = reverse('home')
     selector = 'a.nav-link[href="{}"]'.format(url)
     a = response.cssselect(selector)
     assert len(a) == 1
