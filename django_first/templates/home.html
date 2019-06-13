@@ -3,7 +3,7 @@
 {% block content %}
     <ul class="list-group">
         {% for product in products %}
-        <li class="list-group-item">{{ product.name }} {{ product.price }}</li>
+        {% include "product.html" %}
         {% endfor %}
     </ul>    
 {% endblock %}
