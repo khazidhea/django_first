@@ -1,0 +1,39 @@
+<article class="card card-product">
+    <div class="card-body">
+    <div class="row">
+        <aside class="col-sm-3">
+            <div class="img-wrap"><img src="{{ product.image.url }}"></div>
+        </aside> <!-- col.// -->
+        <article class="col-sm-6">
+                <h4 class="title">{{ product.name }}</h4>
+                <p> Lorem ipsum dolor sit amet, consectetuer adipiscing elit, Lorem ipsum dolor sit amet, consectetuer adipiscing elit, Ut wisi enim ad minim veniam </p>
+                <dl class="dlist-align">
+                  <dt>Color</dt>
+                  <dd>Black and white</dd>
+                </dl>  <!-- item-property-hor .// -->
+                <dl class="dlist-align">
+                  <dt>Material</dt>
+                  <dd>Syntetic, wooden</dd>
+                </dl>  <!-- item-property-hor .// -->
+                <dl class="dlist-align">
+                  <dt>Delivery</dt>
+                  <dd>Russia, USA, and Europe</dd>
+                </dl>  <!-- item-property-hor .// -->
+        </article> <!-- col.// -->
+        <aside class="col-sm-3 border-left">
+            <div class="action-wrap">
+                <div class="price-wrap h4">
+                    <span class="price">${{ product.price }}</span>    
+                </div> <!-- info-price-detail // -->
+                <p class="text-success">Free shipping</p>
+                <br>
+                <p>
+                    <a href="#" class="btn btn-primary"> Buy now </a>
+                    <a href="#" class="btn btn-secondary"> Details  </a>
+                </p>
+                <a href="#"><i class="fa fa-heart"></i> Add to wishlist</a>
+            </div> <!-- action-wrap.// -->
+        </aside> <!-- col.// -->
+    </div> <!-- row.// -->
+    </div> <!-- card-body .// -->
+</article>
