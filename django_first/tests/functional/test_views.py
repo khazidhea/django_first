@@ -40,9 +40,15 @@ def test_hello(db, client, data):
     assert len(a) == 1
     assert a[0].text.strip() == 'alice'
 
-    # Assert there is a link to orders
-    a = response.cssselect('a[href="/orders/"]')
+    # Assert there is a link to home page
+    a = response.cssselect('a.nav-link[href="/"]')
     assert len(a) == 1
+    assert a[0].text == 'Home'
+
+    # Assert there is a link to orders
+    a = response.cssselect('a.nav-link[href="/orders/"]')
+    assert len(a) == 1
+    assert a[0].text == 'Orders'
 
     # Assert there is a list of products with product name and price
     products = response.cssselect('.list-group-item')
