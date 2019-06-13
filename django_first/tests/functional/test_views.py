@@ -1,5 +1,6 @@
 from lxml import html
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 from django_first.models import Order, Product, Customer
 
@@ -28,7 +29,7 @@ def test_logout(db, client, data):
     assert len(response.cssselect('input[name="username"]')) == 1
 
 
-def test_hello(db, client, data):
+def test_home(db, client, data):
     client.login(username='alice', password='alice')
     response = client.get('/')
     assert response.status_code == 200
@@ -40,9 +41,19 @@ def test_hello(db, client, data):
     assert len(a) == 1
     assert a[0].text.strip() == 'alice'
 
-    # Assert there is a link to orders
-    a = response.cssselect('a[href="/orders/"]')
+    # Assert there is a link to home page
+    url = reverse('home')
+    selector = 'a.nav-link[href="{}"]'.format(url)
+    a = response.cssselect(selector)
     assert len(a) == 1
+    assert a[0].text == 'Home'
+
+    # Assert there is a link to orders
+    url = reverse('order_list')
+    selector = 'a.nav-link[href="{}"]'.format(url)
+    a = response.cssselect(selector)
+    assert len(a) == 1
+    assert a[0].text == 'Orders'
 
     # Assert there is a list of products with product name and price
     products = response.cssselect('.list-group-item')

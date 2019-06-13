@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <p>Hi, {{ request.user }}</p>
-    <a href="{% url 'order_list' %}">orders</a>
     <ul class="list-group">
         {% for product in products %}
         <li class="list-group-item">{{ product.name }} {{ product.price }}</li>

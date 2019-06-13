@@ -21,7 +21,7 @@ from . import views
 
 
 urlpatterns = [
-    path('', views.HelloView.as_view()),
+    path('', views.HomeView.as_view(), name='home'),
     path('login/', auth_views.LoginView.as_view(template_name='login.html')),
     path('logout/', auth_views.LogoutView.as_view()),
     path('orders/', views.OrderListView.as_view(), name='order_list'),

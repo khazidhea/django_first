@@ -10,10 +10,10 @@ from .models import Order, OrderItem, Product, Customer
 from .forms import OrderItemForm
 
 
-class HelloView(ListView):
+class HomeView(ListView):
     model = Product
     context_object_name = 'products'
-    template_name = 'hello.html'
+    template_name = 'home.html'
 
 
 class OrderListView(LoginRequiredMixin, ListView):
