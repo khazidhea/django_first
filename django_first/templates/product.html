@@ -28,10 +28,12 @@
                 <p class="text-success">Free shipping</p>
                 <br>
                 <p>
-                    <a href="#" class="btn btn-primary"> Buy now </a>
-                    <a href="#" class="btn btn-secondary"> Details  </a>
+                    <form action="{% url 'order_list' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="product_id" value="{{ product.id }}">
+                        <input class="btn btn-primary" type="submit" value="Buy now"/>
+                    </form>
                 </p>
-                <a href="#"><i class="fa fa-heart"></i> Add to wishlist</a>
             </div> <!-- action-wrap.// -->
         </aside> <!-- col.// -->
     </div> <!-- row.// -->

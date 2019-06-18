@@ -26,12 +26,19 @@ class OrderListView(LoginRequiredMixin, ListView):
 
     def post(self, request):
         customer = Customer.objects.get(user=request.user)
-        location = request.POST.get('location')
-        Order.objects.create(
+        location = request.POST.get('location', 'Almaty')
+        product_id = request.POST.get('product_id')
+        product = Product.objects.get(id=product_id)
+        order = Order.objects.create(
             customer=customer,
             location=location
         )
-        return self.get(request)
+        OrderItem.objects.create(
+            order=order,
+            product=product,
+            quantity=1
+        )
+        return HttpResponseRedirect('/orders/{}'.format(order.id))
 
 
 def order_detail(request, order_id):
