@@ -7,7 +7,7 @@ from .models import (
 
 class SizeFilter(admin.SimpleListFilter):
     title = 'Size'
-    parameter_name = 'attributes'
+    parameter_name = 'size'
 
     def lookups(self, request, model_admin):
         size = Attribute.objects.get(name='size')
@@ -23,9 +23,27 @@ class SizeFilter(admin.SimpleListFilter):
         return queryset
 
 
+class ColorFilter(admin.SimpleListFilter):
+    title = 'Color'
+    parameter_name = 'color'
+
+    def lookups(self, request, model_admin):
+        color = Attribute.objects.get(name='color')
+        values = color.attributevalue_set.all()
+        return (
+            (value.value, value.value) for value in values
+        )
+
+    def queryset(self, request, queryset):
+        if self.value():
+            value = AttributeValue.objects.get(value=self.value())
+            queryset = queryset.filter(attributes__in=[value])
+        return queryset
+
+
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'price')
-    list_filter = (SizeFilter,)
+    list_filter = (SizeFilter, ColorFilter)
 
 
 class StoreItemInline(admin.TabularInline):
