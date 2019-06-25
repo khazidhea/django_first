@@ -6,7 +6,7 @@ from django.views import View
 from django.views.generic import ListView
 from django.views.generic.base import TemplateView
 
-from .models import Order, OrderItem, Product, Customer
+from .models import Order, OrderItem, Product, Customer, Category
 from .forms import OrderItemForm
 
 
@@ -14,6 +14,19 @@ class HomeView(ListView):
     model = Product
     context_object_name = 'products'
     template_name = 'home.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['categories'] = Category.objects.all()
+        return context
+
+    def get_queryset(self, *args, **kwargs):
+        queryset = super().get_queryset(*args, **kwargs)
+        category_filter = self.request.GET.get('category')
+        if category_filter:
+            return queryset.filter(category__name=category_filter)
+        else:
+            return queryset
 
 
 class OrderListView(LoginRequiredMixin, ListView):

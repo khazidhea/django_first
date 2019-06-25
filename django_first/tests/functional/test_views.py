@@ -64,6 +64,33 @@ def test_home(db, client, data):
     assert price[0].text == '$10.00'
 
 
+def test_home_category_filter(db, client, data):
+    response = client.get('/?category=fruits')
+    assert response.status_code == 200
+    response = response.content.decode('utf-8')
+    response = html.fromstring(response)
+
+    # Assert there is a list of products with product name and price
+    products = response.cssselect('.card.card-product')
+    assert len(products) == Product.objects.filter(
+        category__name='fruits'
+    ).count()
+
+
+def test_home_category_filter_empty(db, client, data):
+    response = client.get('/?category=test')
+    assert response.status_code == 200
+    response = response.content.decode('utf-8')
+    response = html.fromstring(response)
+
+    # Assert there is a list of products with product name and price
+    products = response.cssselect('.card.card-product')
+    assert len(products) == Product.objects.filter(
+        category__name='test'
+    ).count()
+    assert len(products) == 0
+
+
 def test_order_view(db, client, data):
     response = client.get('/orders/1/')
     assert response.status_code == 200
