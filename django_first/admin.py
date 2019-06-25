@@ -43,7 +43,7 @@ class ColorFilter(admin.SimpleListFilter):
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'price')
-    list_filter = (SizeFilter, ColorFilter)
+    list_filter = ('category', SizeFilter, ColorFilter)
 
 
 class StoreItemInline(admin.TabularInline):

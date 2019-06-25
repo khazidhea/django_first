@@ -7,6 +7,9 @@ from .exceptions import StoreException, PaymentException
 class Category(models.Model):
     name = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.name
+
 
 class Attribute(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
