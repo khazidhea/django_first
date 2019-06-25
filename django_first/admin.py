@@ -5,6 +5,7 @@ from .models import Product, Store, StoreItem, Order, OrderItem
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'price')
+    list_filter = ('attributes',)
 
 
 class StoreItemInline(admin.TabularInline):

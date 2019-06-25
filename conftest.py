@@ -3,13 +3,22 @@ import pytest
 from django.contrib.auth.models import User
 
 from django_first.models import (
-    Order, OrderItem, Product, Store, StoreItem, Payment, Customer
+    Category, Attribute, AttributeValue, Product,
+    Order, OrderItem, Store, StoreItem, Payment, Customer
 )
 
 
 @pytest.fixture
 def data():
+    category = Category.objects.create(name='fruits')
+    attribute = Attribute.objects.create(category=category, name='size')
+    size_large = AttributeValue.objects.create(
+        attribute=attribute,
+        value='large'
+    )
     product = Product.objects.create(name='apple', price=10)
+    product.attributes.add(size_large)
+
     store = Store.objects.create(location='Almaty')
     store_item = StoreItem.objects.create(
         store=store,

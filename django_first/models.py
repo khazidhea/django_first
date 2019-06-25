@@ -4,12 +4,36 @@ from django.contrib.auth.models import User
 from .exceptions import StoreException, PaymentException
 
 
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+
+
+class Attribute(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+
+
+class AttributeValue(models.Model):
+    value = models.CharField(max_length=100)
+    attribute = models.ForeignKey(Attribute, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.value
+
+
 class Product(models.Model):
     name = models.CharField(max_length=100)
     price = models.DecimalField(
         max_digits=10, decimal_places=2
     )
     image = models.ImageField(blank=True)
+    description = models.TextField(blank=True)
+    category = models.ForeignKey(
+        Category, blank=True, null=True, on_delete=models.CASCADE
+    )
+    attributes = models.ManyToManyField(
+        AttributeValue, related_name='products'
+    )
 
 
 class Customer(models.Model):
