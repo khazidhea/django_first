@@ -70,11 +70,14 @@ def test_home_category_filter(db, client, data):
     response = response.content.decode('utf-8')
     response = html.fromstring(response)
 
-    # Assert there is a list of products with product name and price
+    # Assert there is a list of products from category fruits
     products = response.cssselect('.card.card-product')
     assert len(products) == Product.objects.filter(
         category__name='fruits'
     ).count()
+
+    size_filter = response.cssselect('h6.title')[1]
+    size_filter.text == 'By Size'
 
 
 def test_home_category_filter_empty(db, client, data):

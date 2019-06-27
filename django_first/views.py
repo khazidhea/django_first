@@ -6,7 +6,7 @@ from django.views import View
 from django.views.generic import ListView
 from django.views.generic.base import TemplateView
 
-from .models import Order, OrderItem, Product, Customer, Category
+from .models import Attribute, AttributeValue, Order, OrderItem, Product, Customer, Category
 from .forms import OrderItemForm
 
 
@@ -18,15 +18,41 @@ class HomeView(ListView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['categories'] = Category.objects.all()
+
+        category = self.request.GET.get('category')
+        if category:
+            try:
+                category = Category.objects.get(name=category)
+                context['category_name'] = category.name
+                filters = {
+                    attribute.name: attribute.values.all()
+                    for attribute in category.attributes.all()
+                }
+                context['filters'] = filters
+            except Category.DoesNotExist:
+                pass
         return context
 
     def get_queryset(self, *args, **kwargs):
         queryset = super().get_queryset(*args, **kwargs)
         category_filter = self.request.GET.get('category')
         if category_filter:
-            return queryset.filter(category__name=category_filter)
-        else:
-            return queryset
+            try:
+                category = Category.objects.get(name=category_filter)
+            except Category.DoesNotExist:
+                return queryset
+            queryset = queryset.filter(category=category)
+
+            filter_params = {
+                param: value
+                for param, value in self.request.GET.items()
+                if not param == 'category'
+            }
+            for filter_name, filter_value in filter_params.items():
+                attribute = category.attributes.get(name=filter_name)
+                value = attribute.values.filter(value=filter_value)
+                queryset = queryset.filter(attributes__in=value)
+        return queryset
 
 
 class OrderListView(LoginRequiredMixin, ListView):

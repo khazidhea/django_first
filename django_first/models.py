@@ -12,13 +12,19 @@ class Category(models.Model):
 
 
 class Attribute(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(
+        Category, related_name='attributes',
+        on_delete=models.CASCADE
+    )
     name = models.CharField(max_length=100)
 
 
 class AttributeValue(models.Model):
     value = models.CharField(max_length=100)
-    attribute = models.ForeignKey(Attribute, on_delete=models.CASCADE)
+    attribute = models.ForeignKey(
+        Attribute, related_name='values',
+        on_delete=models.CASCADE
+    )
 
     def __str__(self):
         return self.value

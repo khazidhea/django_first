@@ -22,6 +22,28 @@
                     </div> <!-- collapse .// -->
                 </article> <!-- card-group-item.// -->
             </div>
+
+            {% for filter_name, filter_values in filters.items %}
+            <div class="card card-filter">
+                <article class="card-group-item">
+                    <header class="card-header">
+                        <a class="" aria-expanded="true" href="#" data-toggle="collapse" data-target="#collapse22">
+                            <i class="icon-action fa fa-chevron-down"></i>
+                            <h6 class="title">By {{ filter_name }}</h6>
+                        </a>
+                    </header>
+                    <div style="" class="filter-content collapse show" id="collapse22">
+                        <div class="card-body">
+                            <ul class="list-unstyled list-lg">
+                                {% for value in filter_values %}
+                                <li><a href="?category={{ category_name }}&{{ filter_name }}={{ value }}">{{ value }}</a></li>
+                                {% endfor %}
+                            </ul>  
+                        </div> <!-- card-body.// -->
+                    </div> <!-- collapse .// -->
+                </article> <!-- card-group-item.// -->
+            </div>
+            {% endfor %}
         </aside>
         <main class="col-sm-9">
             <ul class="list-group">
