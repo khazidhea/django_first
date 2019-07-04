@@ -19,6 +19,9 @@ class HomeView(ListView):
 
     @staticmethod
     def _filter_url(current_url, filter_name, filter_value):
+        """
+        Adds filtre value to current url
+        """
         u = urlparse(current_url)
         query = parse_qs(u.query)
         query[filter_name] = filter_value
