@@ -76,8 +76,12 @@ def test_home_category_filter(db, client, data):
         category__name='fruits'
     ).count()
 
-    size_filter = response.cssselect('h6.title')[1]
-    size_filter.text == 'By Size'
+    # Assert the size and color filters are available
+    filter_names = response.cssselect('h6.title')
+    filter_names = [filter_name.text for filter_name in filter_names]
+    assert len(filter_names) == 3
+    assert 'By size' in filter_names
+    assert 'By color' in filter_names
 
 
 def test_home_category_filter_empty(db, client, data):

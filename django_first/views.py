@@ -1,3 +1,5 @@
+from urllib.parse import urlencode, urlparse, urlunparse, parse_qs
+
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, HttpResponseRedirect
@@ -15,6 +17,15 @@ class HomeView(ListView):
     context_object_name = 'products'
     template_name = 'home.html'
 
+    @staticmethod
+    def _filter_url(current_url, filter_name, filter_value):
+        u = urlparse(current_url)
+        query = parse_qs(u.query)
+        query[filter_name] = filter_value
+        u = u._replace(query=urlencode(query, True))
+        url = urlunparse(u)
+        return url
+
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['categories'] = Category.objects.all()
@@ -23,11 +34,19 @@ class HomeView(ListView):
         if category:
             try:
                 category = Category.objects.get(name=category)
-                context['category_name'] = category.name
+                url = self.request.get_full_path()
                 filters = {
                     attribute.name: attribute.values.all()
                     for attribute in category.attributes.all()
                 }
+
+                for name, values in filters.items():
+                    filters[name] = [
+                        {
+                            'url': HomeView._filter_url(url, name, value),
+                            'name': value.value
+                        } for value in values
+                    ]
                 context['filters'] = filters
             except Category.DoesNotExist:
                 pass
@@ -40,7 +59,7 @@ class HomeView(ListView):
             try:
                 category = Category.objects.get(name=category_filter)
             except Category.DoesNotExist:
-                return queryset
+                return []
             queryset = queryset.filter(category=category)
 
             filter_params = {

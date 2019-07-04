@@ -36,7 +36,7 @@
                         <div class="card-body">
                             <ul class="list-unstyled list-lg">
                                 {% for value in filter_values %}
-                                <li><a href="?category={{ category_name }}&{{ filter_name }}={{ value }}">{{ value }}</a></li>
+                                <li><a href="{{ value.url }}">{{ value.name }}</a></li>
                                 {% endfor %}
                             </ul>  
                         </div> <!-- card-body.// -->
