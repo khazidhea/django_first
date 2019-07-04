@@ -83,6 +83,15 @@ def test_home_category_filter(db, client, data):
     assert 'By size' in filter_names
     assert 'By color' in filter_names
 
+    size_filter_values = response.cssselect(
+        '.card-filter_size .filter-content a'
+    )
+    size_filter_values = [value.text for value in size_filter_values]
+    assert len(size_filter_values) == 3
+    assert 'small' in size_filter_values
+    assert 'medium' in size_filter_values
+    assert 'large' in size_filter_values
+
 
 def test_home_category_filter_empty(db, client, data):
     response = client.get('/?category=test')
