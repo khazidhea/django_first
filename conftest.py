@@ -10,9 +10,9 @@ from django_first.models import (
 
 @pytest.fixture
 def data():
-    category = Category.objects.create(name='fruits')
-    size = Attribute.objects.create(category=category, name='size')
-    color = Attribute.objects.create(category=category, name='color')
+    fruits = Category.objects.create(name='fruits')
+    size = Attribute.objects.create(category=fruits, name='size')
+    color = Attribute.objects.create(category=fruits, name='color')
 
     size_large = AttributeValue.objects.create(attribute=size, value='large')
     size_medium = AttributeValue.objects.create(attribute=size, value='medium')
@@ -23,14 +23,22 @@ def data():
         attribute=color, value='yellow'
     )
 
-    large_green_apple = Product.objects.create(name='apple', price=10)
+    large_green_apple = Product.objects.create(
+        name='apple', price=10, category=fruits
+    )
     large_green_apple.attributes.set([size_large, color_green])
-    medium_green_apple = Product.objects.create(name='apple', price=7)
+    medium_green_apple = Product.objects.create(
+        name='apple', price=7, category=fruits
+    )
     medium_green_apple.attributes.set([size_medium, color_green])
-    small_green_apple = Product.objects.create(name='apple', price=5)
+    small_green_apple = Product.objects.create(
+        name='apple', price=5, category=fruits
+    )
     small_green_apple.attributes.set([size_small, color_green])
 
-    large_yellow_banana = Product.objects.create(name='banana', price=10)
+    large_yellow_banana = Product.objects.create(
+        name='banana', price=10, category=fruits
+    )
     large_yellow_banana.attributes.set([size_large, color_yellow])
 
     store = Store.objects.create(location='Almaty')
