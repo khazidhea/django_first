@@ -83,6 +83,7 @@ def test_home_category_filter(db, client, data):
     assert 'By size' in filter_names
     assert 'By color' in filter_names
 
+    # Assert all possible size values are in size filter
     size_filter_values = response.cssselect(
         '.card-filter_size .filter-content a'
     )
@@ -105,6 +106,26 @@ def test_home_category_filter_empty(db, client, data):
         category__name='test'
     ).count()
     assert len(products) == 0
+
+
+def test_home_filter_combinations(db, client, data):
+    # Assert there are only 2 large products
+    response = client.get('/?category=fruits&size=large')
+    assert response.status_code == 200
+    response = response.content.decode('utf-8')
+    response = html.fromstring(response)
+    products = response.cssselect('.card.card-product')
+    assert len(products) == 2
+
+    # Assert there is only 1 large yellow product and it is banana
+    response = client.get('/?category=fruits&size=large&color=yellow')
+    assert response.status_code == 200
+    response = response.content.decode('utf-8')
+    response = html.fromstring(response)
+    products = response.cssselect('.card.card-product')
+    assert len(products) == 1
+    product_title = response.cssselect('.card.card-product h4')[0]
+    assert product_title.text == 'banana'
 
 
 def test_order_view(db, client, data):
