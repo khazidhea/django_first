@@ -3,17 +3,48 @@ import pytest
 from django.contrib.auth.models import User
 
 from django_first.models import (
-    Order, OrderItem, Product, Store, StoreItem, Payment, Customer
+    Category, Attribute, AttributeValue, Product,
+    Order, OrderItem, Store, StoreItem, Payment, Customer
 )
 
 
 @pytest.fixture
 def data():
-    product = Product.objects.create(name='apple', price=10)
+    fruits = Category.objects.create(name='fruits')
+    size = Attribute.objects.create(category=fruits, name='size')
+    color = Attribute.objects.create(category=fruits, name='color')
+
+    size_large = AttributeValue.objects.create(attribute=size, value='large')
+    size_medium = AttributeValue.objects.create(attribute=size, value='medium')
+    size_small = AttributeValue.objects.create(attribute=size, value='small')
+
+    color_green = AttributeValue.objects.create(attribute=color, value='green')
+    color_yellow = AttributeValue.objects.create(
+        attribute=color, value='yellow'
+    )
+
+    large_green_apple = Product.objects.create(
+        name='apple', price=10, category=fruits
+    )
+    large_green_apple.attributes.set([size_large, color_green])
+    medium_green_apple = Product.objects.create(
+        name='apple', price=7, category=fruits
+    )
+    medium_green_apple.attributes.set([size_medium, color_green])
+    small_green_apple = Product.objects.create(
+        name='apple', price=5, category=fruits
+    )
+    small_green_apple.attributes.set([size_small, color_green])
+
+    large_yellow_banana = Product.objects.create(
+        name='banana', price=10, category=fruits
+    )
+    large_yellow_banana.attributes.set([size_large, color_yellow])
+
     store = Store.objects.create(location='Almaty')
     store_item = StoreItem.objects.create(
         store=store,
-        product=product,
+        product=large_green_apple,
         quantity=100
     )
     user = User.objects.create_user(username='alice', password='alice')
@@ -21,7 +52,7 @@ def data():
     order = Order.objects.create(location='Almaty', customer=customer)
     order_item = OrderItem.objects.create(
         order=order,
-        product=product,
+        product=large_green_apple,
         quantity=10
     )
     payment = Payment.objects.create(
@@ -29,4 +60,4 @@ def data():
         amount=1000,
         is_confirmed=True
     )
-    return product, store, store_item, order, order_item, payment
+    return large_green_apple, store, store_item, order, order_item, payment

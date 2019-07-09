@@ -1,9 +1,56 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <ul class="list-group">
-        {% for product in products %}
-        {% include "product.html" %}
-        {% endfor %}
-    </ul>    
+    <div class="row">
+        <aside class="col-sm-3">
+            <div class="card card-filter">
+                <article class="card-group-item">
+                    <header class="card-header">
+                        <a class="" aria-expanded="true" href="#" data-toggle="collapse" data-target="#collapse22">
+                            <i class="icon-action fa fa-chevron-down"></i>
+                            <h6 class="title">By Category</h6>
+                        </a>
+                    </header>
+                    <div style="" class="filter-content collapse show" id="collapse22">
+                        <div class="card-body">
+                            <ul class="list-unstyled list-lg">
+                                {% for category in categories %}
+                                <li><a href="?category={{ category.name }}">{{ category.name }}<span class="float-right badge badge-light round">142</span> </a></li>
+                                {% endfor %}
+                            </ul>  
+                        </div> <!-- card-body.// -->
+                    </div> <!-- collapse .// -->
+                </article> <!-- card-group-item.// -->
+            </div>
+
+            {% for filter_name, filter_values in filters.items %}
+            <div class="card card-filter card-filter_{{ filter_name }}">
+                <article class="card-group-item">
+                    <header class="card-header">
+                        <a class="" aria-expanded="true" href="#" data-toggle="collapse" data-target="#collapse22">
+                            <i class="icon-action fa fa-chevron-down"></i>
+                            <h6 class="title">By {{ filter_name }}</h6>
+                        </a>
+                    </header>
+                    <div style="" class="filter-content collapse show" id="collapse22">
+                        <div class="card-body">
+                            <ul class="list-unstyled list-lg">
+                                {% for value in filter_values %}
+                                <li><a href="{{ value.url }}">{{ value.name }}</a></li>
+                                {% endfor %}
+                            </ul>  
+                        </div> <!-- card-body.// -->
+                    </div> <!-- collapse .// -->
+                </article> <!-- card-group-item.// -->
+            </div>
+            {% endfor %}
+        </aside>
+        <main class="col-sm-9">
+            <ul class="list-group">
+                {% for product in products %}
+                {% include "product.html" %}
+                {% endfor %}
+            </ul>    
+        </main>
+    </div>
 {% endblock %}

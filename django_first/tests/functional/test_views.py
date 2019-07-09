@@ -56,9 +56,76 @@ def test_home(db, client, data):
     assert a[0].text == 'Orders'
 
     # Assert there is a list of products with product name and price
-    products = response.cssselect('.list-group-item')
+    products = response.cssselect('.card.card-product')
     assert len(products) == Product.objects.count()
-    assert products[0].text == 'apple 10.00'
+    title = response.cssselect('h4.title')
+    assert title[0].text == 'apple'
+    price = response.cssselect('.price')
+    assert price[0].text == '$10.00'
+
+
+def test_home_category_filter(db, client, data):
+    response = client.get('/?category=fruits')
+    assert response.status_code == 200
+    response = response.content.decode('utf-8')
+    response = html.fromstring(response)
+
+    # Assert there is a list of products from category fruits
+    products = response.cssselect('.card.card-product')
+    assert len(products) == Product.objects.filter(
+        category__name='fruits'
+    ).count()
+
+    # Assert the size and color filters are available
+    filter_names = response.cssselect('h6.title')
+    filter_names = [filter_name.text for filter_name in filter_names]
+    assert len(filter_names) == 3
+    assert 'By size' in filter_names
+    assert 'By color' in filter_names
+
+    # Assert all possible size values are in size filter
+    size_filter_values = response.cssselect(
+        '.card-filter_size .filter-content a'
+    )
+    size_filter_values = [value.text for value in size_filter_values]
+    assert len(size_filter_values) == 3
+    assert 'small' in size_filter_values
+    assert 'medium' in size_filter_values
+    assert 'large' in size_filter_values
+
+
+def test_home_category_filter_empty(db, client, data):
+    response = client.get('/?category=test')
+    assert response.status_code == 200
+    response = response.content.decode('utf-8')
+    response = html.fromstring(response)
+
+    # Assert there is a list of products with product name and price
+    products = response.cssselect('.card.card-product')
+    assert len(products) == Product.objects.filter(
+        category__name='test'
+    ).count()
+    assert len(products) == 0
+
+
+def test_home_filter_combinations(db, client, data):
+    # Assert there are only 2 large products
+    response = client.get('/?category=fruits&size=large')
+    assert response.status_code == 200
+    response = response.content.decode('utf-8')
+    response = html.fromstring(response)
+    products = response.cssselect('.card.card-product')
+    assert len(products) == 2
+
+    # Assert there is only 1 large yellow product and it is banana
+    response = client.get('/?category=fruits&size=large&color=yellow')
+    assert response.status_code == 200
+    response = response.content.decode('utf-8')
+    response = html.fromstring(response)
+    products = response.cssselect('.card.card-product')
+    assert len(products) == 1
+    product_title = response.cssselect('.card.card-product h4')[0]
+    assert product_title.text == 'banana'
 
 
 def test_order_view(db, client, data):
