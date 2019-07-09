@@ -1,0 +1,2 @@
+[run]
+omit = manage.py, django_first/wsgi.py
