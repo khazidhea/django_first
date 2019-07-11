@@ -11,7 +11,7 @@ class SizeFilter(admin.SimpleListFilter):
 
     def lookups(self, request, model_admin):
         size = Attribute.objects.get(name='size')
-        values = size.attributevalue_set.all()
+        values = size.values.all()
         return (
             (value.value, value.value) for value in values
         )
@@ -29,7 +29,7 @@ class ColorFilter(admin.SimpleListFilter):
 
     def lookups(self, request, model_admin):
         color = Attribute.objects.get(name='color')
-        values = color.attributevalue_set.all()
+        values = color.values.all()
         return (
             (value.value, value.value) for value in values
         )

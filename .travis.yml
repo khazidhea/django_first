@@ -5,4 +5,4 @@ python:
 
 install: pip install -r requirements.txt
 
-script: pytest
+script: pytest -v --cov . --cov-report term-missing --cov-fail-under=100
