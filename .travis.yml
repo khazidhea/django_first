@@ -1,8 +1,13 @@
 language: python
-
 python:
- - "3.6"
-
+- '3.6'
+before_install:
+- openssl aes-256-cbc -K $encrypted_c476f92c5c02_key -iv $encrypted_c476f92c5c02_iv
+  -in aws_stockholm.pem.enc -out aws_stockholm.pem -d
 install: pip install -r requirements.txt
-
 script: pytest -v --cov . --cov-report term-missing --cov-fail-under=100
+deploy:
+  provider: script
+  script: fab -i aws_stockholm.pem -H ubuntu@13.53.174.164 deploy
+  on:
+    branc: master
