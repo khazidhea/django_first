@@ -10,4 +10,4 @@ deploy:
   provider: script
   script: fab -i aws_stockholm.pem -H ubuntu@13.53.174.164 deploy
   on:
-    branc: master
+    branch: master
