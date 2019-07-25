@@ -1,2 +1,2 @@
 [run]
-omit = manage.py, django_first/wsgi.py
+omit = manage.py, django_first/wsgi.py, fabfile.py
