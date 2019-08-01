@@ -9,6 +9,6 @@ script: pytest -v --cov . --cov-report term-missing --cov-fail-under=100
 deploy:
   skip_cleanup: true
   provider: script
-  script: fab -i aws_stockholm.pem -H ubuntu@13.53.174.164 deploy
+  script: fab -i aws_stockholm.pem deploy
   on:
     branch: master
