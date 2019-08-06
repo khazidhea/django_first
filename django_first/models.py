@@ -108,6 +108,10 @@ class OrderItem(models.Model):
     )
     quantity = models.IntegerField()
 
+    @property
+    def price(self):
+        return self.product.price * self.quantity
+
 
 class Payment(models.Model):
     METHOD_CARD = 'card'
