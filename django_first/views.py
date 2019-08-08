@@ -1,14 +1,12 @@
 from urllib.parse import urlencode, urlparse, urlunparse, parse_qs
 
-from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from django.views import View
 from django.views.generic import ListView
 from django.views.generic.base import TemplateView
 
-from .models import Attribute, AttributeValue, Order, OrderItem, Product, Customer, Category
+from .models import Order, OrderItem, Product, Customer, Category
 from .forms import OrderItemForm
 
 

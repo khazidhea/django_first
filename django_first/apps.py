@@ -5,4 +5,4 @@ class DjangoFirstConfig(AppConfig):
     name = 'django_first'
 
     def ready(self, *args, **kwargs):
-        import django_first.signals
+        import django_first.signals # noqa
