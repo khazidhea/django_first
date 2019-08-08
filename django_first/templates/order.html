@@ -1,14 +1,40 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <ul class="list-group">
-        {% for item in order.items.all %}
-        <li class="list-group-item">{{ item.product.name }} {{ item.quantity }}</li>
-        {% endfor %}
-    </ul>
+<div class="row">
+    <main class="col-sm-9">
+
+<div class="card">
+<table class="table table-hover shopping-cart-wrap">
+<thead class="text-muted">
+<tr>
+  <th scope="col">Product</th>
+  <th scope="col" width="120">Quantity</th>
+  <th scope="col" width="120">Price</th>
+  <th scope="col" class="text-right" width="200">Action</th>
+</tr>
+</thead>
+<tbody>
+{% for item in order.items.all %}
+  {% include "order_item.html" %}
+{% endfor %}
+</tbody>
+</table>
+</div> <!-- card.// -->
+
+    </main> <!-- col.// -->
+    <aside class="col-sm-3">
+<dl class="dlist-align">
+  <dt>Total price: </dt>
+  <dd class="text-right">{{ order.price }}</dd>
+</dl>
+<hr>
+<figure class="itemside mb-3">
     <form method="POST">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit"/>
+        <input class="btn btn-md btn-success" type="submit" value="Pay">
     </form>
+</figure>
+
+    </aside> <!-- col.// -->
+</div>
 {% endblock %}

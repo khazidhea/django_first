@@ -133,10 +133,10 @@ def test_order_view(db, client, data):
     assert response.status_code == 200
     response = response.content.decode('utf-8')
     response = html.fromstring(response)
-    items = response.cssselect('.list-group-item')
-    assert items[0].text == 'apple 10'
-    assert response.cssselect('#id_product') != []
-    assert response.cssselect('#id_quantity') != []
+    selector = 'body > div > div > main > div > table > tbody > ' + \
+        'tr > td:nth-child(1) > figure > figcaption > h6'
+    items = response.cssselect(selector)
+    assert items[0].text == 'apple'
 
 
 def test_order_add(db, client, data):
@@ -152,7 +152,10 @@ def test_order_add(db, client, data):
     response = response.content.decode('utf-8')
     response = html.fromstring(response)
     items = response.cssselect('.list-group-item')
-    assert items[0].text == 'apple 1'
+    selector = 'body > div > div > main > div > table > tbody' + \
+        ' > tr > td:nth-child(2) > input'
+    items = response.cssselect(selector)
+    assert items[0].attrib['value'] == '1'
 
 
 def test_order_add_item_same(db, client, data):
@@ -160,8 +163,10 @@ def test_order_add_item_same(db, client, data):
     assert response.status_code == 200
     response = response.content.decode('utf-8')
     response = html.fromstring(response)
-    items = response.cssselect('.list-group-item')
-    assert items[0].text == 'apple 20'
+    selector = 'body > div > div > main > div > table > tbody' + \
+        ' > tr > td:nth-child(2) > input'
+    items = response.cssselect(selector)
+    assert items[0].attrib['value'] == '20'
 
 
 def test_order_add_item_new(db, client, data):
@@ -173,9 +178,11 @@ def test_order_add_item_new(db, client, data):
     assert response.status_code == 200
     response = response.content.decode('utf-8')
     response = html.fromstring(response)
-    items = response.cssselect('.list-group-item')
-    assert items[0].text == 'apple 10'
-    assert items[1].text == 'banana 30'
+    selector = 'body > div > div > main > div > table > tbody' + \
+        ' > tr > td:nth-child(2) > input'
+    items = response.cssselect(selector)
+    assert items[0].attrib['value'] == '10'
+    assert items[1].attrib['value'] == '30'
 
 
 def test_order_add_item_product_doesnt_exist(db, client, data):
