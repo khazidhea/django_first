@@ -19,8 +19,9 @@ def order_item_post_save(sender, **kwargs):
         post_save.connect(order_item_post_save, sender=OrderItem)
 
     order.price = sum(
-        (item.product.price * item.quantity for item in order.items.all())
+        (item.price for item in order.items.all())
     )
+    order.save()
 
 
 @receiver(post_save, sender=Payment)

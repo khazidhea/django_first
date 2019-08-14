@@ -2,7 +2,7 @@ from lxml import html
 from django.contrib.auth.models import User
 from django.urls import reverse
 
-from django_first.models import Order, Product, Customer
+from django_first.models import Order, OrderItem, Product, Customer
 
 
 def test_login(db, client, data):
@@ -225,6 +225,11 @@ def test_order_add_item_negative_quantity(db, client, data):
     assert response.status_code == 400
     response = response.content.decode('utf-8')
     assert response == 'Validation error'
+
+
+def test_order_item_edit_quantity(db, client, data):
+    client.patch('/order_items/1/', {'quantity': 100})
+    assert OrderItem.objects.get(id=1).quantity == 100
 
 
 def test_bye(client):

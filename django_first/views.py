@@ -5,9 +5,10 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic import ListView
 from django.views.generic.base import TemplateView
+from django.views.generic.edit import UpdateView
 
 from .models import Order, OrderItem, Product, Customer, Category
-from .forms import OrderItemForm
+from .forms import OrderItemForm, OrderItemFormSet
 
 
 class HomeView(ListView):
@@ -100,8 +101,17 @@ class OrderListView(LoginRequiredMixin, ListView):
         return HttpResponseRedirect('/orders/{}'.format(order.id))
 
 
+class OrderItemUpdate(LoginRequiredMixin, UpdateView):
+    model = OrderItem
+    fields = ['quantity']
+    form = OrderItemForm
+    context_object_name = 'item'
+    template_name = 'order_item.html'
+
+
 def order_detail(request, order_id):
     order = Order.objects.get(id=order_id)
+    form = None
     if request.method == 'POST':
         form = OrderItemForm(request.POST)
         if form.is_valid():
@@ -121,11 +131,10 @@ def order_detail(request, order_id):
             )
         else:
             return HttpResponse('Validation error', status=400)
-    else:
-        form = OrderItemForm()
     return render(request, 'order.html', context={
         'order': order,
-        'form': form
+        'form': form,
+        'items': OrderItemFormSet(instance=order)
     })
 
 

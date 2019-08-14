@@ -1,26 +1,32 @@
+{% load widget_tweaks %}
+
+<form method="POST" enctype="multipart/form-data">
+{% csrf_token %}
 <tr>
     <td>
 <figure class="media">
     <div class="img-wrap">
-        {% if item.product.image %}
-        <img src="{{ item.product.image.url }}" class="img-thumbnail img-sm">
+        {% if item.image %}
+        <img src="{{ item.image.value }}" class="img-thumbnail img-sm">
         {% endif %}
     </div>
     <figcaption class="media-body">
-        <h6 class="title text-truncate">{{ item.product.name }}</h6>
+        <h6 class="title text-truncate">{{ item.name.value }}</h6>
     </figcaption>
 </figure> 
     </td>
-    <td> 
-        <input class="form-control" type="text" value="{{ item.quantity }}">
+    <td>
+        {% render_field item.quantity class="form-control" %}
     </td>
     <td> 
-        <div class="price-wrap"> 
+        <div class="price-wrap">
             <var class="price">USD {{ item.price }}</var> 
-            <small class="text-muted">(USD5 {{ item.product.price }})</small> 
+            <small class="text-muted">(USD {{ item.product.price }})</small> 
         </div> <!-- price-wrap .// -->
     </td>
     <td class="text-right"> 
-    <a href="" class="btn btn-outline-danger"> × Remove</a>
+    <input type="submit" value="Save" class="btn btn-outline-success"/>
+    <a href="" class="btn btn-outline-danger">Remove</a>
     </td>
 </tr>
+</form>
