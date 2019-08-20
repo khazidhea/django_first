@@ -3,12 +3,11 @@ from urllib.parse import urlencode, urlparse, urlunparse, parse_qs
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from django.views.generic import ListView
+from django.views.generic import ListView, UpdateView
 from django.views.generic.base import TemplateView
-from django.views.generic.edit import UpdateView
 
 from .models import Order, OrderItem, Product, Customer, Category
-from .forms import OrderItemForm, OrderItemFormSet
+from .forms import OrderForm, OrderItemForm, OrderItemFormSet
 
 
 class HomeView(ListView):
@@ -101,12 +100,30 @@ class OrderListView(LoginRequiredMixin, ListView):
         return HttpResponseRedirect('/orders/{}'.format(order.id))
 
 
-class OrderItemUpdate(LoginRequiredMixin, UpdateView):
-    model = OrderItem
-    fields = ['quantity']
-    form = OrderItemForm
-    context_object_name = 'item'
-    template_name = 'order_item.html'
+class OrderUpdateView(LoginRequiredMixin, UpdateView):
+    model = Order
+    form_class = OrderForm
+    context_object_name = 'order'
+    template_name = 'order.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['items'] = OrderItemFormSet(instance=self.object)
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data(form=form)
+        formset = context['items']
+        if formset.is_valid():
+            print('valid')
+            response = super().form_valid(form)
+            formset.instance = self.object
+            formset.save()
+            return response
+        else:
+            print(formset.errors)
+            print(formset.total_error_count())
+            return super().form_invalid(form)
 
 
 def order_detail(request, order_id):

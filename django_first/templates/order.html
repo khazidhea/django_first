@@ -3,7 +3,8 @@
 {% block content %}
 <div class="row">
     <main class="col-sm-9">
-
+    <form method="POST">
+    {% csrf_token %}
 <div class="card">
 <table class="table table-hover shopping-cart-wrap">
 <thead class="text-muted">
@@ -11,7 +12,7 @@
   <th scope="col">Product</th>
   <th scope="col" width="120">Quantity</th>
   <th scope="col" width="120">Price</th>
-  <th scope="col" class="text-right" width="200">Action</th>
+  <th scope="col" class="text-right" width="200">Delete</th>
 </tr>
 </thead>
 <tbody>
@@ -21,7 +22,8 @@
 </tbody>
 </table>
 </div> <!-- card.// -->
-
+    <input class="btn btn-md btn-success" type="submit" value="Save">
+    </form>
     </main> <!-- col.// -->
     <aside class="col-sm-3">
 <dl class="dlist-align">
@@ -30,7 +32,7 @@
 </dl>
 <hr>
 <figure class="itemside mb-3">
-    <form method="POST">
+    <form action="payments" method="POST">
         <input class="btn btn-md btn-success" type="submit" value="Pay">
     </form>
 </figure>

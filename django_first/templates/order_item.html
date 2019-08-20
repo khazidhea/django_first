@@ -1,7 +1,5 @@
 {% load widget_tweaks %}
 
-<form method="POST" enctype="multipart/form-data">
-{% csrf_token %}
 <tr>
     <td>
 <figure class="media">
@@ -20,13 +18,11 @@
     </td>
     <td> 
         <div class="price-wrap">
-            <var class="price">USD {{ item.price }}</var> 
-            <small class="text-muted">(USD {{ item.product.price }})</small> 
+            <var class="price">USD {{ item.price.value }}</var> 
+            <small class="text-muted">(USD {{ item.product_price.value }})</small> 
         </div> <!-- price-wrap .// -->
     </td>
     <td class="text-right"> 
-    <input type="submit" value="Save" class="btn btn-outline-success"/>
-    <a href="" class="btn btn-outline-danger">Remove</a>
+    {{ item.DELETE }}
     </td>
 </tr>
-</form>

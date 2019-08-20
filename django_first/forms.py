@@ -4,10 +4,23 @@ from django.forms.models import inlineformset_factory
 from .models import Order, OrderItem
 
 
+class OrderForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        exclude = ['customer']
+
+    def clean(self):
+        result = super().clean()
+        print(self.errors)
+        return result
+
+
 class OrderItemForm(forms.ModelForm):
     name = forms.CharField()
     image = forms.ImageField()
-    quantity = forms.IntegerField(label='quantity', min_value=1)
+    quantity = forms.IntegerField(min_value=1)
+    price = forms.IntegerField()
+    product_price = forms.IntegerField()
 
     class Meta:
         model = OrderItem
@@ -15,9 +28,12 @@ class OrderItemForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.initial['name'] = self.instance.product.name
-        print(self.instance.product.image.url)
-        self.initial['image'] = self.instance.product.image.url
+        if self.instance.pk:
+            self.initial['name'] = self.instance.product.name
+            self.initial['price'] = self.instance.price
+            self.initial['product_price'] = self.instance.product.price
+            if self.instance.product.image:
+                self.initial['image'] = self.instance.product.image.url
 
 
 OrderItemFormSet = inlineformset_factory(
