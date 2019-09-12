@@ -38,7 +38,9 @@ class Product(models.Model):
     image = models.ImageField(blank=True)
     description = models.TextField(blank=True)
     category = models.ForeignKey(
-        Category, blank=True, null=True, on_delete=models.CASCADE
+        Category, blank=True, null=True,
+        related_name='products',
+        on_delete=models.CASCADE
     )
     attributes = models.ManyToManyField(
         AttributeValue, related_name='products'

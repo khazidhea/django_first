@@ -17,12 +17,16 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
-from django.urls import path
+from django.urls import path, include
 
 from . import views
+from .api import api_urls
 
 
 urlpatterns = [
+    path('api-auth/', include('rest_framework.urls')),
+    path('api/', include(api_urls)),
+
     path('', views.HomeView.as_view(), name='home'),
     path('login/', auth_views.LoginView.as_view(template_name='login.html')),
     path('logout/', auth_views.LogoutView.as_view()),
