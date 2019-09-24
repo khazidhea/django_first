@@ -16,11 +16,11 @@ class OrderForm(forms.ModelForm):
 
 
 class OrderItemForm(forms.ModelForm):
-    name = forms.CharField()
-    image = forms.ImageField()
-    quantity = forms.IntegerField(min_value=1)
-    price = forms.IntegerField()
-    product_price = forms.IntegerField()
+    name = forms.CharField(required=False)
+    image = forms.ImageField(required=False)
+    quantity = forms.IntegerField(min_value=1, required=False)
+    price = forms.IntegerField(required=False)
+    product_price = forms.IntegerField(required=False)
 
     class Meta:
         model = OrderItem
@@ -28,6 +28,7 @@ class OrderItemForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['product'].required = False
         if self.instance.pk:
             self.initial['name'] = self.instance.product.name
             self.initial['price'] = self.instance.price

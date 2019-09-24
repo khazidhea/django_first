@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 from .exceptions import StoreException, PaymentException
 
@@ -77,6 +78,9 @@ class Order(models.Model):
         blank=True, null=True
     )
     is_paid = models.BooleanField(default=False)
+
+    def get_absolute_url(self):
+        return reverse('order_detail', kwargs={'pk': self.id})
 
     def process(self):
         try:

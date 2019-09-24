@@ -1,28 +1,5 @@
 {% load widget_tweaks %}
 
 <tr>
-    <td>
-<figure class="media">
-    <div class="img-wrap">
-        {% if item.image %}
-        <img src="{{ item.image.value }}" class="img-thumbnail img-sm">
-        {% endif %}
-    </div>
-    <figcaption class="media-body">
-        <h6 class="title text-truncate">{{ item.name.value }}</h6>
-    </figcaption>
-</figure> 
-    </td>
-    <td>
-        {% render_field item.quantity class="form-control" %}
-    </td>
-    <td> 
-        <div class="price-wrap">
-            <var class="price">USD {{ item.price.value }}</var> 
-            <small class="text-muted">(USD {{ item.product_price.value }})</small> 
-        </div> <!-- price-wrap .// -->
-    </td>
-    <td class="text-right"> 
-    {{ item.DELETE }}
-    </td>
+{{ item }}
 </tr>

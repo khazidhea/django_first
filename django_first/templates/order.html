@@ -5,18 +5,23 @@
     <main class="col-sm-9">
     <form method="POST">
     {% csrf_token %}
+    {{ form }}
 <div class="card">
 <table class="table table-hover shopping-cart-wrap">
-<thead class="text-muted">
-<tr>
-  <th scope="col">Product</th>
-  <th scope="col" width="120">Quantity</th>
-  <th scope="col" width="120">Price</th>
-  <th scope="col" class="text-right" width="200">Delete</th>
-</tr>
-</thead>
+
+
+{{ items.management_form }}
+{% for item in items.forms %}
+  {% if forloop.first %}
+  <thead class="text-muted">
+    <tr>
+      {% for field in form.visible_fields %}
+          <th scope="col">{{ field.label|capfirst }}</th>
+      {% endfor %}
+    </tr>
+  </thead>
+{% endif %}
 <tbody>
-{% for item in items %}
   {% include "order_item.html" %}
 {% endfor %}
 </tbody>

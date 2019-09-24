@@ -108,7 +108,11 @@ class OrderUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context['items'] = OrderItemFormSet(instance=self.object)
+        print(self.object)
+        if self.request.POST:
+            context['items'] = OrderItemFormSet(self.request.POST)
+        else:
+            context['items'] = OrderItemFormSet(instance=self.object)
         return context
 
     def form_valid(self, form):
@@ -116,10 +120,12 @@ class OrderUpdateView(LoginRequiredMixin, UpdateView):
         formset = context['items']
         if formset.is_valid():
             print('valid')
-            response = super().form_valid(form)
             formset.instance = self.object
             formset.save()
-            return response
+            for f in formset: 
+                cd = f.cleaned_data
+                print(cd)
+            return super().form_valid(form)
         else:
             print(formset.errors)
             print(formset.total_error_count())
