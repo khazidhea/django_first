@@ -4,7 +4,7 @@ from rest_framework import routers
 from .models import Category, Order
 from .serializers import (
     CategorySerializer, CategoryDetailSerializer,
-    OrderSerializer, OrderDetailSerializer
+    OrderSerializer, OrderDetailSerializer, OrderCreateSerializer
 )
 
 
@@ -52,6 +52,7 @@ class OrderViewSet(MultiSerializerViewSetMixin, ModelViewSet):
     serializer_action_classes = {
         'list': OrderSerializer,
         'retrieve': OrderDetailSerializer,
+        'create': OrderCreateSerializer
     }
 
 

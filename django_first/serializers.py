@@ -25,6 +25,12 @@ class OrderItemSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class OrderItemCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderItem
+        exclude = ['order']
+
+
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
@@ -33,3 +39,23 @@ class OrderSerializer(serializers.ModelSerializer):
 
 class OrderDetailSerializer(OrderSerializer):
     items = OrderItemSerializer(many=True)
+
+    def create(self, validated_data):
+        items = validated_data.pop('items')
+        order = Order.objects.create(**validated_data)
+        for item in items:
+            item['order'] = order
+            OrderItem.objects.create(**item)
+        return order
+
+
+class OrderCreateSerializer(OrderSerializer):
+    items = OrderItemCreateSerializer(many=True)
+
+    def create(self, validated_data):
+        items = validated_data.pop('items')
+        order = Order.objects.create(**validated_data)
+        for item in items:
+            item['order'] = order
+            OrderItem.objects.create(**item)
+        return order
