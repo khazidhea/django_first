@@ -19,11 +19,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
 
+from rest_framework.authtoken import views as drf_views
+
 from . import views
 from .api import api_urls
 
 
 urlpatterns = [
+    path('api/auth/', drf_views.obtain_auth_token),
     path('api-auth/', include('rest_framework.urls')),
     path('api/', include(api_urls)),
 

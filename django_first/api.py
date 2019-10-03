@@ -1,5 +1,5 @@
 from rest_framework.viewsets import ModelViewSet
-from rest_framework import routers
+from rest_framework import routers, permissions
 
 from .models import Category, Order
 from .serializers import (
@@ -45,7 +45,6 @@ class CategoryViewSet(MultiSerializerViewSetMixin, ModelViewSet):
     }
 
 
-
 class OrderViewSet(MultiSerializerViewSetMixin, ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
@@ -54,6 +53,7 @@ class OrderViewSet(MultiSerializerViewSetMixin, ModelViewSet):
         'retrieve': OrderDetailSerializer,
         'create': OrderCreateSerializer
     }
+    permission_classes = (permissions.IsAuthenticated,)
 
 
 router = routers.SimpleRouter()
