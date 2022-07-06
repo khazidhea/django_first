@@ -16,7 +16,7 @@ invoke==1.2.0
 ipython==7.4.0
 ipython-genutils==0.2.0
 jedi==0.13.3
-lxml==4.3.3
+lxml==4.9.1
 mccabe==0.6.1
 more-itertools==6.0.0
 paramiko==2.6.0
